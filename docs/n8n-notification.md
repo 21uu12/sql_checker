@@ -14,13 +14,14 @@ SQL -> 表元数据 -> owner -> 通知目标
 
 ## GitHub 配置
 
-在 GitHub 仓库中创建 Actions Secret：
+在 GitHub 仓库中创建两个 Actions Secret：
 
 ```text
 N8N_SQL_GOVERNANCE_WEBHOOK_URL
+N8N_SQL_GOVERNANCE_WEBHOOK_TOKEN
 ```
 
-值为 N8N 的 Production Webhook URL。未配置该 Secret 时，工作流会继续生成报告，但跳过 N8N 发送。
+第一个值为 N8N 的 Production Webhook URL。第二个值为你在 N8N Header Auth 凭证中配置的 Token；Actions 将把它放在 `X-SQL-Governance-Token` 请求头中。未完整配置两个 Secret 时，工作流会继续生成报告，但跳过 N8N 发送。
 
 ## N8N 工作流
 
