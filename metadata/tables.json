@@ -1,0 +1,25 @@
+{
+  "tables": [
+    {
+      "name": "dwd_order_detail",
+      "owner": "data-platform",
+      "partition_columns": ["dt", "create_time"],
+      "row_count": 980000000,
+      "notes": "Large order detail fact table."
+    },
+    {
+      "name": "dim_user",
+      "owner": "user-domain",
+      "partition_columns": [],
+      "row_count": 12000000,
+      "notes": "User dimension table."
+    },
+    {
+      "name": "ads_user_summary",
+      "owner": "analytics",
+      "partition_columns": ["dt"],
+      "row_count": 50000000,
+      "notes": "Daily user summary table."
+    }
+  ]
+}

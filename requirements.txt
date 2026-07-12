@@ -1,0 +1,3 @@
+# `sqlglot` turns SQL into an abstract syntax tree (AST) for robust parsing.
+# Install with: python -m pip install -r requirements.txt
+sqlglot>=20,<25
