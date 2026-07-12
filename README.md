@@ -1,4 +1,4 @@
-# SQL Governance Agent
+# SQL 治理 Agent
 
 一个用于学习 Codex 工程化工作方式的可接入项目雏形。
 
@@ -18,21 +18,21 @@ Markdown 治理报告
 - 规则沉淀在 `skills/`，优化标准可以持续迭代。
 - 可执行逻辑沉淀在 `tools/`，结果可复现、可测试、可接入。
 
-## Quick Start
+## 快速开始
 
 ```powershell
 python main.py examples/bad_query.sql --metadata metadata/tables.json --out outputs/bad_query_report.md
 ```
 
-## Review a SQL Circle
+## 审查一个 SQL Circle
 
-Review every `.sql` file in a local Git working directory and write one summary report:
+扫描本地 Git 工作目录中的全部 `.sql` 文件，并生成一份汇总报告：
 
 ```powershell
 python circle.py <git-working-directory> --metadata metadata/tables.json --out outputs/circle_report.md
 ```
 
-The Circle score starts at 100 for every SQL file. Each P1 finding deducts 25 points and each P2 finding deducts 10 points. The final Circle score is the average across reviewed SQL files. Complex SQL is marked for deeper review; it is not executed or modified.
+每个 SQL 文件初始为 100 分。每个 P1 问题扣 25 分，每个 P2 问题扣 10 分。最终 Circle 分数是全部已审查 SQL 文件分数的平均值。复杂 SQL 会被标记为深度复核，不会被执行或修改。
 
 第二版新增复杂度路由：
 
@@ -50,7 +50,7 @@ python -m pip install -r requirements.txt
 
 当前电脑无法连接 Python 包仓库时，程序仍可使用兼容解析器运行，并在报告的 `Parser` 一行明确提示。安装成功后会自动切换到 `sqlglot AST`。
 
-## Project Layout
+## 项目结构
 
 ```text
 sql-governance-agent/
@@ -77,7 +77,7 @@ sql-governance-agent/
     └── sql_parser.py
 ```
 
-## Learning Path
+## 学习路径
 
 1. v0: 本地 SQL 文件分析，也就是当前版本。
 2. v1: 接入 StarRocks query log，把 `query_id / scan_bytes / cpu_time / sql` 作为输入。
@@ -85,7 +85,7 @@ sql-governance-agent/
 4. v3: 接入企业微信/飞书，但默认只生成消息草稿，人工确认后发送。
 5. v4: 拆分 SubAgent：SQL 分析、血缘、负责人检索、报告生成。
 
-## How To Learn Codex With This Project
+## 如何通过本项目学习 Codex
 
 每次不要只问“帮我写代码”。更好的问法是：
 

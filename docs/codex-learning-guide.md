@@ -117,7 +117,7 @@ scan_bytes > 50GB 时标记 P1。
 
 你学到的是：
 - Agent 的动作边界。
-- 为什么真实生产 Agent 需要 human-in-the-loop。
+- 为什么真实生产 Agent 需要人工参与决策。
 
 ## 这个项目和直接问 AI 的本质区别
 

@@ -1,20 +1,20 @@
-# Report Format Skill
+# 报告格式技能
 
-Governance reports should be direct and actionable.
+治理报告应直接且可执行。
 
-Required sections:
-- Risk level
-- Tables
-- Owners
-- Findings
-- Next Human Check
+必需章节：
+- 风险等级
+- 涉及表
+- 负责人
+- 发现项
+- 下一步人工检查
 
-Every finding must include:
-- Evidence
-- Impact
-- Recommendation
+每个发现项必须包含：
+- 证据
+- 影响
+- 建议
 
-Avoid:
-- Long generic SQL lectures.
-- Optimizations not connected to visible evidence.
-- Sending blame-oriented messages to query owners.
+避免：
+- 冗长、泛泛的 SQL 教学。
+- 与可见证据无关的优化建议。
+- 向查询负责人发送带有指责意味的消息。

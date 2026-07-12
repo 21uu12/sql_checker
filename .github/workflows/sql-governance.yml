@@ -1,4 +1,4 @@
-name: SQL Governance Circle
+name: SQL 治理 Circle
 
 on:
   push:
@@ -25,44 +25,44 @@ jobs:
   score-circle:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out SQL repository
+      - name: 检出 SQL 仓库
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: 准备 Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install SQL parser
+      - name: 安装 SQL 解析依赖
         run: python -m pip install --requirement requirements.txt
 
-      - name: Score SQL Circle
+      - name: 评估 SQL Circle
         run: python circle.py . --metadata metadata/tables.json --out outputs/circle_report.md
 
-      - name: Publish workflow summary
+      - name: 发布工作流摘要
         run: cat outputs/circle_report.md >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Upload Circle report
+      - name: 上传 Circle 报告
         uses: actions/upload-artifact@v4
         with:
           name: sql-governance-circle-report
           path: outputs/circle_report.md
           retention-days: 30
 
-      - name: Comment Circle score on pull request
+      - name: 在拉取请求中评论 Circle 评分
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false
         uses: actions/github-script@v9
         with:
           script: |
             const fs = require('fs');
             const report = fs.readFileSync('outputs/circle_report.md', 'utf8');
-            const score = report.match(/Circle score: \*\*(\d+\/100)\*\*/)[1];
-            const evaluation = report.match(/Circle evaluation: \*\*(.+?)\*\*/)[1];
-            const p1 = report.match(/P1 findings: (\d+)/)[1];
-            const p2 = report.match(/P2 findings: (\d+)/)[1];
-            const complex = report.match(/Complex SQL files requiring deeper review: (\d+)/)[1];
+            const score = report.match(/Circle 评分：\*\*(\d+\/100)\*\*/)[1];
+            const evaluation = report.match(/Circle 评价：\*\*(.+?)\*\*/)[1];
+            const p1 = report.match(/P1 发现项：(\d+)/)[1];
+            const p2 = report.match(/P2 发现项：(\d+)/)[1];
+            const complex = report.match(/需深度复核的复杂 SQL 文件：(\d+)/)[1];
             const marker = '<!-- sql-governance-circle -->';
-            const body = `${marker}\n## SQL Governance Circle\n\nScore: **${score}**  \nEvaluation: **${evaluation}**\n\n- P1 findings: ${p1}\n- P2 findings: ${p2}\n- Complex SQL files for deeper review: ${complex}\n\nSee the workflow summary or artifact for the full report.`;
+            const body = `${marker}\n## SQL 治理 Circle\n\n评分：**${score}**  \n评价：**${evaluation}**\n\n- P1 发现项：${p1}\n- P2 发现项：${p2}\n- 需深度复核的复杂 SQL 文件：${complex}\n\n完整报告请查看工作流摘要或构建产物。`;
             const comments = await github.paginate(github.rest.issues.listComments, {
               owner: context.repo.owner,
               repo: context.repo.repo,

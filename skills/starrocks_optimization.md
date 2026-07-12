@@ -1,21 +1,21 @@
-# StarRocks Optimization Skill
+# StarRocks 优化技能
 
-StarRocks-oriented rules for this project:
+本项目的 StarRocks 专项规则：
 
-- Prefer partition pruning through direct range predicates.
-- Avoid wrapping partition columns in functions inside `WHERE`.
-- Replace `date(create_time) = '2026-07-01'` with:
+- 优先通过直接范围条件实现分区裁剪。
+- 不要在 `WHERE` 中用函数包装分区列。
+- 将 `date(create_time) = '2026-07-01'` 改为：
 
 ```sql
 create_time >= '2026-07-01'
 and create_time < '2026-07-02'
 ```
 
-- Wide projections increase scan and network cost. Prefer explicit columns.
-- For large joins, check:
-  - join keys
-  - join type
-  - whether dimension tables can be filtered first
-  - whether fact tables can be pre-aggregated
+- 宽投影会增加扫描和网络成本，应显式选择列。
+- 对大型 JOIN，检查：
+  - 关联键
+  - 关联类型
+  - 是否能先过滤维表
+  - 是否能预聚合事实表
 
-Do not claim a query is definitely slow without runtime evidence such as scan bytes, profile, CPU time, memory, or row counts. Use "risk" wording until runtime data is available.
+没有扫描字节、Profile、CPU 时间、内存或行数等运行时证据时，不得断言查询一定很慢。在获得运行时数据前，应使用“风险”措辞。

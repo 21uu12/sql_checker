@@ -32,10 +32,10 @@ def analyze_sql(sql: str, metadata: dict[str, TableMetadata]) -> AnalysisResult:
             Finding(
                 code="SQL001",
                 priority="P2",
-                title="Avoid SELECT * in governance-sensitive queries",
-                evidence="The projection uses SELECT *.",
-                impact="Wide projection increases scan, network transfer, and downstream memory pressure.",
-                recommendation="Select only required columns and keep large text/blob columns out of routine analysis queries.",
+                title="治理敏感查询中应避免使用 SELECT *",
+                evidence="投影中使用了 SELECT *。",
+                impact="宽投影会增加扫描量、网络传输量和下游内存压力。",
+                recommendation="只选择所需列，并在常规分析查询中排除大文本或 Blob 列。",
             )
         )
 
@@ -45,10 +45,10 @@ def analyze_sql(sql: str, metadata: dict[str, TableMetadata]) -> AnalysisResult:
             Finding(
                 code="SQL002",
                 priority="P1",
-                title="Function-wrapped filter columns may disable partition pruning",
-                evidence=f"WHERE contains function-wrapped column(s): {columns}.",
-                impact="StarRocks may be unable to prune partitions when the partition column is wrapped by a function.",
-                recommendation="Rewrite filters as range predicates, for example col >= '2026-07-01' and col < '2026-07-02'.",
+                title="函数包装过滤列可能导致分区裁剪失效",
+                evidence=f"WHERE 中存在被函数包装的列：{columns}。",
+                impact="分区列被函数包装时，StarRocks 可能无法裁剪分区。",
+                recommendation="将过滤条件改写为范围条件，例如 col >= '2026-07-01' 且 col < '2026-07-02'。",
             )
         )
 
@@ -60,10 +60,10 @@ def analyze_sql(sql: str, metadata: dict[str, TableMetadata]) -> AnalysisResult:
             Finding(
                 code="SQL004",
                 priority="P2",
-                title="Multiple joins need cardinality review",
-                evidence=f"The query contains {parsed.join_count} JOIN clauses.",
-                impact="Large joins can multiply intermediate rows and raise shuffle or memory cost.",
-                recommendation="Confirm join keys are selective, pre-aggregate large fact tables, and avoid joining unused dimensions.",
+                title="多个 JOIN 需要进行基数审查",
+                evidence=f"该查询包含 {parsed.join_count} 个 JOIN 子句。",
+                impact="大型 JOIN 可能放大中间结果行数，并提高 Shuffle 或内存成本。",
+                recommendation="确认关联键具有选择性，预聚合大型事实表，并避免关联未使用的维表。",
             )
         )
 
@@ -79,10 +79,10 @@ def find_partition_pruning_risks(parsed: ParsedSql, metadata: dict[str, TableMet
             Finding(
                 code="SQL003",
                 priority="P1",
-                title="Missing WHERE clause",
-                evidence="No WHERE clause was found.",
-                impact="The query may scan full tables.",
-                recommendation="Add a bounded time or partition filter before running the query in production.",
+                title="缺少 WHERE 条件",
+                evidence="未找到 WHERE 子句。",
+                impact="该查询可能扫描整张表。",
+                recommendation="在生产环境运行前添加有边界的时间或分区过滤条件。",
             )
         ]
 
@@ -97,10 +97,10 @@ def find_partition_pruning_risks(parsed: ParsedSql, metadata: dict[str, TableMet
                 Finding(
                     code="SQL003",
                     priority="P1",
-                    title=f"Missing partition filter for {table}",
-                    evidence=f"Known partition columns are {', '.join(table_meta.partition_columns)}, but none appear in WHERE.",
-                    impact="The query may scan unnecessary partitions.",
-                    recommendation="Add an explicit bounded predicate on the partition column.",
+                title=f"表 {table} 缺少分区过滤条件",
+                evidence=f"已知分区列为 {', '.join(table_meta.partition_columns)}，但 WHERE 中未出现这些列。",
+                impact="该查询可能扫描不必要的分区。",
+                recommendation="在分区列上添加明确且有边界的过滤条件。",
                 )
             )
 

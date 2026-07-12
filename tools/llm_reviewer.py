@@ -14,35 +14,35 @@ class AgentReview:
 
 
 def create_agent_review(sql: str, parsed: ParsedSql, complexity: ComplexityAssessment) -> AgentReview:
-    """Prepare a bounded Agent task; no model is called by this local prototype."""
-    prompt = """You are a senior StarRocks SQL governance reviewer.
+    """准备受约束的 Agent 任务；当前本地原型不会调用模型。"""
+    prompt = """你是一名资深 StarRocks SQL 治理审查人员。
 
-Review the SQL below. Return JSON only, with this schema:
+审查以下 SQL。仅返回 JSON，格式如下：
 {{
   \"findings\": [
     {{
       \"code\": \"LLM001\",
       \"priority\": \"P1|P2|P3\",
-      \"title\": \"short title\",
-      \"evidence\": \"specific SQL evidence\",
-      \"impact\": \"likely performance or correctness impact\",
-      \"recommendation\": \"concrete and safe recommendation\"
+      \"title\": \"简短标题\",
+      \"evidence\": \"具体的 SQL 证据\",
+      \"impact\": \"可能的性能或正确性影响\",
+      \"recommendation\": \"具体且安全的建议\"
     }}
   ],
-  \"questions_for_human\": [\"facts that must be confirmed from metadata or query profile\"]
+  \"questions_for_human\": [\"必须从元数据或查询 Profile 确认的事实\"]
 }}
 
-Do not claim a partition, distribution key, row count, or query profile metric unless it is present in the input.
+除非输入中已提供，否则不得断言分区、分桶键、行数或查询 Profile 指标。
 
-Complexity score: {score}
-Tables: {tables}
-SQL:
+复杂度分数：{score}
+涉及表：{tables}
+SQL：
 ```sql
 {sql}
-```""".format(score=complexity.score, tables=", ".join(parsed.tables) or "unknown", sql=sql.strip())
+```""".format(score=complexity.score, tables=", ".join(parsed.tables) or "未知", sql=sql.strip())
 
     return AgentReview(
         status="pending_model_call",
-        reason="Automatic routing selected Agent review for a complex SQL statement.",
+        reason="自动路由将此复杂 SQL 分配至 Agent 复核。",
         prompt=prompt,
     )

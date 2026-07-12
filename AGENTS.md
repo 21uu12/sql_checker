@@ -1,23 +1,23 @@
-# SQL Governance Agent Instructions
+# SQL 治理 Agent 指引
 
-You are working on a data-platform SQL governance assistant.
+你正在维护一个数据平台 SQL 治理助手。
 
-Primary goal:
-- Help data engineers identify expensive or risky SQL patterns before sending a human-readable governance report.
+主要目标：
+- 在生成面向人工的治理报告前，帮助数据工程师识别高成本或高风险 SQL 模式。
 
-Project rules:
-- Do not auto-kill queries, modify production jobs, or send messages without an explicit human approval step.
-- Prefer deterministic checks before LLM-style advice.
-- Every report must include evidence, impact, recommendation, and priority.
-- Keep domain rules in `skills/` and executable logic in `tools/`.
-- Keep examples realistic but sanitized. Do not include company secrets, real user identifiers, or private table names unless explicitly approved.
+项目规则：
+- 未经人工明确批准，不得自动终止查询、修改生产任务或发送消息。
+- 优先使用确定性检查，再给出 LLM 风格的建议。
+- 每份报告必须包含证据、影响、建议和优先级。
+- 领域规则放在 `skills/`，可执行逻辑放在 `tools/`。
+- 示例应真实但经过脱敏；除非明确批准，不得包含公司机密、真实用户标识或私有表名。
 
-Review order for SQL:
-1. Scan range and partition pruning risk.
-2. `SELECT *` or overly wide projection.
-3. Function-wrapped filter columns.
-4. Join cardinality and missing join predicates.
-5. Output/report clarity.
+SQL 审查顺序：
+1. 扫描范围和分区裁剪风险。
+2. `SELECT *` 或投影列过宽。
+3. 过滤列被函数包装。
+4. JOIN 基数和缺失关联条件。
+5. 输出与报告清晰度。
 
-Current v0 limitation:
-- This is a local prototype. It reads SQL files and static table metadata. Future versions can connect to StarRocks query logs, Google Sheets, and notification systems.
+当前 v0 限制：
+- 这是一个本地原型，仅读取 SQL 文件和静态表元数据。后续版本可以接入 StarRocks 查询日志、Google Sheets 和通知系统。

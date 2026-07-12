@@ -63,7 +63,7 @@ def review_sql_file(path: Path, source: Path, metadata: dict[str, TableMetadata]
         return SqlFileReview(
             path=path.relative_to(source),
             score=0,
-            evaluation="Unreadable",
+            evaluation="无法读取",
             route="rules",
             finding_count=0,
             p1_count=0,
@@ -80,9 +80,9 @@ def calculate_circle_score(reviews: tuple[SqlFileReview, ...]) -> int:
 
 def evaluate_score(score: int) -> str:
     if score >= 90:
-        return "Good"
+        return "良好"
     if score >= 70:
-        return "Watch"
+        return "关注"
     if score >= 40:
-        return "Needs Review"
-    return "High Risk"
+        return "需要复核"
+    return "高风险"

@@ -41,7 +41,7 @@ def parse_sql(sql: str) -> ParsedSql:
         try:
             return parse_with_sqlglot(normalized, line_count)
         except Exception:
-            # SQL dialects vary. The prototype remains usable for unsupported SQL.
+            # SQL 方言存在差异；遇到暂不支持的 SQL 时，原型仍可使用降级解析继续运行。
             pass
 
     tables: list[str] = []
@@ -59,7 +59,7 @@ def parse_sql(sql: str) -> ParsedSql:
 
     return ParsedSql(
         normalized_sql=normalized,
-        parser_engine="regex fallback (install sqlglot for AST parsing)",
+        parser_engine="正则降级解析（安装 sqlglot 可启用 AST 解析）",
         tables=tuple(dict.fromkeys(tables)),
         aliases=aliases,
         has_select_star=bool(re.search(r"\bselect\s+\*", normalized, re.IGNORECASE)),

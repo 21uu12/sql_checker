@@ -1,14 +1,14 @@
-# SQL Review Skill
+# SQL 审查技能
 
-Use this skill when reviewing SQL for governance risk.
+在审查 SQL 治理风险时使用此技能。
 
-Core checks:
-- Projection: flag `SELECT *`.
-- Scan range: every large fact table should have a bounded time or partition predicate.
-- Function filters: flag predicates like `date(column) = ...`, `substr(column, ...) = ...`, or `cast(column as ...) = ...`.
-- Joins: multiple joins require cardinality review, even when syntax is valid.
+核心检查：
+- 投影：标记 `SELECT *`。
+- 扫描范围：每张大型事实表都应有明确的时间或分区范围条件。
+- 函数过滤：标记 `date(column) = ...`、`substr(column, ...) = ...` 或 `cast(column as ...) = ...` 等条件。
+- JOIN：即使语法正确，多个 JOIN 也需要进行基数审查。
 
-Severity:
-- P1: likely full scan, partition pruning failure, or missing WHERE on large tables.
-- P2: inefficient but usually fixable before production execution.
-- P3: style or maintainability issue.
+严重程度：
+- P1：可能全表扫描、分区裁剪失效，或大型表缺少 WHERE 条件。
+- P2：效率较低，但通常可在生产执行前修复。
+- P3：风格或可维护性问题。
