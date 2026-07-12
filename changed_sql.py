@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import argparse
+import json
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
 from tools.analyzer import analyze_sql
+from tools.notification_payload import build_notification_payload, load_owner_targets
 from tools.sql_review import SqlFileReview, review_sql_text
 from tools.metadata import TableMetadata, load_table_metadata
 
@@ -25,6 +27,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--metadata", type=Path, default=Path("metadata/tables.json"))
     parser.add_argument("--baseline-ref", default="HEAD^")
     parser.add_argument("--out", type=Path, default=Path("outputs/changed_sql_report.md"))
+    parser.add_argument("--owner-metadata", type=Path, default=Path("metadata/owners.json"))
+    parser.add_argument("--notification-out", type=Path)
     return parser.parse_args()
 
 
@@ -146,6 +150,17 @@ def main() -> None:
     report = render_report(reviews, args.source, args.baseline_ref, metadata)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(report, encoding="utf-8")
+    if args.notification_out:
+        payload = build_notification_payload(
+            reviews,
+            args.source,
+            metadata,
+            load_owner_targets(args.owner_metadata),
+            args.baseline_ref,
+            report,
+        )
+        args.notification_out.parent.mkdir(parents=True, exist_ok=True)
+        args.notification_out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"已写入 {args.out}（变更 SQL：{len(reviews)}）")
 
 

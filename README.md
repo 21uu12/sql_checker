@@ -12,6 +12,7 @@
 - 在 GitHub Actions 摘要中展示完整 Markdown 报告。
 - 在 PR 中自动新增或更新 SQL 变更评论。
 - 将完整报告保存为 GitHub Actions 构建产物，保留 30 天。
+- 生成结构化通知 Payload，并可选发送给 N8N 发起审批流程。
 
 ## 工作方式
 
@@ -109,7 +110,9 @@ python changed_sql.py --source sql --metadata metadata/tables.json --out outputs
 - 不执行 SQL。
 - 不自动终止查询。
 - 不修改生产任务或 SQL 文件。
-- 不自动发送通知。
+- 未经人工批准，不向个人自动发送通知；N8N 默认只接收审批任务 Payload。
 - 不调用外部大模型 API。
 
 后续若接入 Agent，应保留固定规则评分，并将模型用于复杂 SQL 的解释与优化建议；模型输出必须通过结构化校验后才能写入报告。
+
+N8N 接入方式与通知元数据说明见 [docs/n8n-notification.md](docs/n8n-notification.md)。

@@ -1,0 +1,28 @@
+{
+  "owners": {
+    "data-platform": {
+      "notification_targets": [
+        {
+          "channel": "approval_queue",
+          "recipient": "data-platform-governance"
+        }
+      ]
+    },
+    "user-domain": {
+      "notification_targets": [
+        {
+          "channel": "approval_queue",
+          "recipient": "user-domain-governance"
+        }
+      ]
+    },
+    "analytics": {
+      "notification_targets": [
+        {
+          "channel": "approval_queue",
+          "recipient": "analytics-governance"
+        }
+      ]
+    }
+  }
+}
