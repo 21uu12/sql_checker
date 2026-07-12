@@ -1,10 +1,10 @@
 # SQL 治理 Circle
 
-这是一个面向 GitHub SQL 仓库的自动治理工具。每次提交或更新 SQL 后，GitHub Actions 会自动扫描仓库中的 SQL 文件，按固定规则评分，并生成 Circle 评价报告。
+这是一个面向 GitHub SQL 仓库的自动治理工具。每次提交或更新 `sql/` 目录中的 SQL 后，GitHub Actions 会自动扫描该目录中的 SQL 文件，按固定规则评分，并生成 Circle 评价报告。
 
 ## 可以做什么
 
-- 自动扫描 Git 仓库中的全部 `.sql` 文件。
+- 自动扫描 `sql/` 目录中的全部 `.sql` 文件。
 - 检查 `SELECT *`、函数包装过滤列、缺少 `WHERE`、缺少已知分区过滤条件和多 JOIN 风险。
 - 读取 `metadata/tables.json` 中的静态表元数据，补充分区列和负责人信息。
 - 对每个 SQL 文件评分，并汇总为整个 Circle 的评分和评价。
@@ -16,13 +16,13 @@
 ## 工作方式
 
 ```text
-提交或更新 SQL
+提交或更新 `sql/` 中的 SQL
         ↓
 GitHub Actions 被触发
         ↓
 准备临时 Python 环境并安装依赖
         ↓
-运行 circle.py 扫描全部 SQL
+运行 circle.py 扫描 `sql/` 下的全部 SQL
         ↓
 执行确定性规则、计算评分和复杂度
         ↓
@@ -31,7 +31,20 @@ GitHub Actions 被触发
 Actions 摘要、报告产物和 PR 评分评论
 ```
 
-工作流定义在 `.github/workflows/sql-governance.yml`。当 `.sql` 文件、表元数据或治理程序发生变化时，会自动触发；也可以在 GitHub Actions 页面手动运行。
+工作流定义在 `.github/workflows/sql-governance.yml`。当 `sql/` 下的 `.sql` 文件、表元数据或治理程序发生变化时，会自动触发；也可以在 GitHub Actions 页面手动运行。
+
+## 上传 SQL
+
+将每个 Circle 放在 `sql/` 下的独立目录中：
+
+```text
+sql/
+└── daily_order/
+    ├── order_summary.sql
+    └── order_detail.sql
+```
+
+提交一个新的 `.sql` 文件后，工作流会自动重新计算 `sql/` 目录的 Circle 评分。`examples/` 仅用于本地演示，不参与 GitHub 的正式评分。
 
 ## 评分规则
 
@@ -86,7 +99,7 @@ python main.py examples/bad_query.sql --metadata metadata/tables.json --out outp
 分析一个本地 Git 工作目录：
 
 ```powershell
-python circle.py <Git 工作目录> --metadata metadata/tables.json --out outputs/circle_report.md
+python circle.py sql --metadata metadata/tables.json --out outputs/circle_report.md
 ```
 
 没有元数据文件时，程序仍会运行，但只输出可从 SQL 文本中确定的规则结论，不会猜测分区、表规模或负责人。
