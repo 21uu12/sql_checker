@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Optional
 
 from tools.analyzer import analyze_sql
 from tools.complexity import assess_complexity
@@ -24,7 +24,7 @@ class SqlFileReview:
 @dataclass(frozen=True)
 class CircleReview:
     source: Path
-    score: int
+    score: Optional[int]
     evaluation: str
     sql_files: tuple[SqlFileReview, ...]
 
@@ -72,13 +72,15 @@ def review_sql_file(path: Path, source: Path, metadata: dict[str, TableMetadata]
         )
 
 
-def calculate_circle_score(reviews: tuple[SqlFileReview, ...]) -> int:
+def calculate_circle_score(reviews: tuple[SqlFileReview, ...]) -> Optional[int]:
     if not reviews:
-        return 100
+        return None
     return round(sum(review.score for review in reviews) / len(reviews))
 
 
-def evaluate_score(score: int) -> str:
+def evaluate_score(score: Optional[int]) -> str:
+    if score is None:
+        return "未评分"
     if score >= 90:
         return "良好"
     if score >= 70:

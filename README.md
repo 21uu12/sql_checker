@@ -44,7 +44,7 @@ sql/
     └── order_detail.sql
 ```
 
-提交一个新的 `.sql` 文件后，工作流会自动重新计算 `sql/` 目录的 Circle 评分。`examples/` 仅用于本地演示，不参与 GitHub 的正式评分。
+提交一个新的 `.sql` 文件后，工作流会自动重新计算 `sql/` 目录的 Circle 评分。`sql/` 为空时，系统显示“未评分”，不会给出误导性的分数。`examples/` 仅用于本地演示，不参与 GitHub 的正式评分。
 
 ## 评分规则
 

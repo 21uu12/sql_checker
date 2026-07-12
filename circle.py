@@ -17,6 +17,7 @@ def parse_args() -> argparse.Namespace:
 
 def render_circle_report(review: CircleReview) -> str:
     files = review.sql_files
+    score = f"{review.score}/100" if review.score is not None else "不适用（未找到 SQL 文件）"
     p1_count = sum(item.p1_count for item in files)
     p2_count = sum(item.p2_count for item in files)
     agent_count = sum(item.route == "agent" for item in files)
@@ -25,7 +26,7 @@ def render_circle_report(review: CircleReview) -> str:
         "",
         f"来源：`{review.source}`",
         f"已审查 SQL 文件：{len(files)}",
-        f"Circle 评分：**{review.score}/100**",
+        f"Circle 评分：**{score}**",
         f"Circle 评价：**{review.evaluation}**",
         "",
         "## 规则汇总",
@@ -87,7 +88,8 @@ def main() -> None:
     report = render_circle_report(review)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(report, encoding="utf-8")
-    print(f"已写入 {args.out}（{len(review.sql_files)} 个 SQL 文件，{review.score}/100，{review.evaluation}）")
+    score = f"{review.score}/100" if review.score is not None else "未评分"
+    print(f"已写入 {args.out}（{len(review.sql_files)} 个 SQL 文件，{score}，{review.evaluation}）")
 
 
 if __name__ == "__main__":

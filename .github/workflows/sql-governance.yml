@@ -56,7 +56,7 @@ jobs:
           script: |
             const fs = require('fs');
             const report = fs.readFileSync('outputs/circle_report.md', 'utf8');
-            const score = report.match(/Circle 评分：\*\*(\d+\/100)\*\*/)[1];
+            const score = report.match(/Circle 评分：\*\*(.+?)\*\*/)[1];
             const evaluation = report.match(/Circle 评价：\*\*(.+?)\*\*/)[1];
             const p1 = report.match(/P1 发现项：(\d+)/)[1];
             const p2 = report.match(/P2 发现项：(\d+)/)[1];
